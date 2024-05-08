@@ -16,6 +16,8 @@ boolean mousePressedMove = false;
 
 void draw() {
   background(#FAB1F3);
+  hearts();
+  
  
   
   int noofCircles = 10;
@@ -54,9 +56,112 @@ void draw() {
     ellipse(x, y, circleSize * 2, circleSize * 2);
   }    
   }
+    
 
- //hearts
-fill(#F03F3F);
+
+
+
+fill(#811578);
+noStroke();
+rect(234,680,234,40);
+
+fill(#FF03D6);
+noStroke();
+circle(355,660,40);
+
+
+
+
+
+
+stroke(0);
+strokeWeight (2.5);
+//When the mouse is behind the line
+if(mouseY>=ay+109 && mouseX>ax){
+ line(ax,ay+109,ax+100,ay+109);//draw horizontal line right
+ line(ax+100,ay+109,ax+75,ay+99);
+ line(ax+100,ay+109,ax+75,ay+119);
+}
+if(mouseY>=ay+109 && mouseX<ax){
+ line(ax,ay+109,ax-100,ay+109);//draw horizontal line left
+ line(ax-100,ay+109,ax-75,ay+99);
+ line(ax-100,ay+109,ax-75,ay+119);
+}
+if(ax - mouseX != 0){//prevents divison by 0
+if(mouseY<ay+109 && mouseX>ax){//if mouse is above and right
+  distance = dist(mouseX,mouseY,ax,ay+109);//calculate distance to mouse
+  theta = acos((ay+109-mouseY)/distance);//calculate angle between mouse and vertical
+  pushMatrix();//store grid
+  translate(ax,ay+109);//move grid
+  rotate((3*PI/2)+theta);//rotate grd
+  line(0,0,100,0);//draw line
+  line(100,0,75,10);
+  line(100,0,75,-10);
+  popMatrix();//restore grid
+}
+if(mouseY<ay+109 && mouseX<ax){//if mouse is above left
+  distance = dist(mouseX,mouseY,ax,ay+109);//calculate distance to mouse
+  theta = acos((ay+109-mouseY)/distance);//calculate angle between mouse and vertical
+  pushMatrix();//store grid
+  translate(ax,ay+109);//move grid
+  rotate((3*PI/2)-theta);//rotate grd
+  line(0,0,100,0);//draw line
+  line(100,0,75,10);
+  line(100,0,75,-10);
+  popMatrix();//restore grid
+}
+}
+
+
+
+if (mousePressedMove) {
+  fill(255,0,0); //its red rn but make sure to try and make the colour randomise when shoot
+  noStroke();
+  ellipse(circleX, circleY, 43, 43);
+  circleX += circleSpeed * cos(shootAngle);
+  circleY += circleSpeed * sin(shootAngle);
+  
+  //make sure the circle shoots in the correct direction
+  if (circleY < 0) {
+    mousePressedMove = false; //stop drawing the circle (1)
+  }
+  
+  if (circleY > height) {
+    mousePressedMove = false; //stop drawing the circle (2)
+  }
+  
+  if (circleX < 0) {
+    mousePressedMove = false; //stop drawing the circle (3)
+  }
+  
+  if (circleX > width) {
+    mousePressedMove = false; //stop drawing the circle (4)
+  }
+ }
+}
+
+void mousePressed() {
+  mousePressedMove = true;
+  circleX = ax;
+  circleY = ay + 109;
+  
+  // shooting angle is based on mouse position + arrow position so we calculate it
+  
+  distance = dist(mouseX, mouseY, ax, ay + 109);
+  theta = acos ((ay + 109 - mouseY) / distance);
+  if (mouseX < ax) {
+    shootAngle = (3 * PI / 2) - theta;
+  } else {
+    shootAngle = (3 * PI / 2) + theta;
+  }
+}
+
+
+  
+//subroutine for 3 hearts at bottom of screen
+void hearts() {
+noStroke();
+fill(#FF1F1F);
 beginShape();
 vertex(36,761);
 vertex(37,760);
@@ -145,6 +250,7 @@ vertex(35,760);
 vertex(36,760);
 vertex(36,761);
 endShape(CLOSE);
+
 
 
 
@@ -324,116 +430,8 @@ vertex(119,760);
 vertex(120,760);
 vertex(120,761);
 endShape(CLOSE);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-fill(#811578);
-noStroke();
-rect(234,680,234,40);
-
-fill(#FF03D6);
-noStroke();
-circle(355,660,40);
-
-
-
-
-
-
-stroke(0);
-strokeWeight (2.5);
-//When the mouse is behind the line
-if(mouseY>=ay+109 && mouseX>ax){
- line(ax,ay+109,ax+100,ay+109);//draw horizontal line right
- line(ax+100,ay+109,ax+75,ay+99);
- line(ax+100,ay+109,ax+75,ay+119);
-}
-if(mouseY>=ay+109 && mouseX<ax){
- line(ax,ay+109,ax-100,ay+109);//draw horizontal line left
- line(ax-100,ay+109,ax-75,ay+99);
- line(ax-100,ay+109,ax-75,ay+119);
-}
-if(ax - mouseX != 0){//prevents divison by 0
-if(mouseY<ay+109 && mouseX>ax){//if mouse is above and right
-  distance = dist(mouseX,mouseY,ax,ay+109);//calculate distance to mouse
-  theta = acos((ay+109-mouseY)/distance);//calculate angle between mouse and vertical
-  pushMatrix();//store grid
-  translate(ax,ay+109);//move grid
-  rotate((3*PI/2)+theta);//rotate grd
-  line(0,0,100,0);//draw line
-  line(100,0,75,10);
-  line(100,0,75,-10);
-  popMatrix();//restore grid
-}
-if(mouseY<ay+109 && mouseX<ax){//if mouse is above left
-  distance = dist(mouseX,mouseY,ax,ay+109);//calculate distance to mouse
-  theta = acos((ay+109-mouseY)/distance);//calculate angle between mouse and vertical
-  pushMatrix();//store grid
-  translate(ax,ay+109);//move grid
-  rotate((3*PI/2)-theta);//rotate grd
-  line(0,0,100,0);//draw line
-  line(100,0,75,10);
-  line(100,0,75,-10);
-  popMatrix();//restore grid
-}
 }
 
-if (mousePressedMove) {
-  fill(255,0,0); //its red rn but make sure to try and make the colour randomise when shoot
-  noStroke();
-  ellipse(circleX, circleY, 43, 43);
-  circleX += circleSpeed * cos(shootAngle);
-  circleY += circleSpeed * sin(shootAngle);
-  
-  //make sure the circle shoots in the correct direction
-  if (circleY < 0) {
-    mousePressedMove = false; //stop drawing the circle (1)
-  }
-  
-  if (circleY > height) {
-    mousePressedMove = false; //stop drawing the circle (2)
-  }
-  
-  if (circleX < 0) {
-    mousePressedMove = false; //stop drawing the circle (3)
-  }
-  
-  if (circleX > width) {
-    mousePressedMove = false; //stop drawing the circle (4)
-  }
- }
-}
-
-void mousePressed() {
-  mousePressedMove = true;
-  circleX = ax;
-  circleY = ay + 109;
-  
-  // shooting angle is based on mouse position + arrow position so we calculate it
-  
-  distance = dist(mouseX, mouseY, ax, ay + 109);
-  theta = acos ((ay + 109 - mouseY) / distance);
-  if (mouseX < ax) {
-    shootAngle = (3 * PI / 2) - theta;
-  } else {
-    shootAngle = (3 * PI / 2) + theta;
-  }
-}
-  
-  
   
   
   
