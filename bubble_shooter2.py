@@ -1,7 +1,4 @@
-"""A complete, dependency-free Bubble Shooter game using tkinter.
 
-Run with: python bubble_shooter.py
-"""
 
 from __future__ import annotations
 
@@ -110,7 +107,7 @@ class BubbleShooter:
         length = math.hypot(dx, dy)
         if length < 1:
             return
-        # Upward shots only; keep enough horizontal movement for reliable wall bounces.
+        # wall bounce
         dy = min(dy, -20)
         length = math.hypot(dx, dy)
         speed = 12
@@ -201,7 +198,6 @@ class BubbleShooter:
         shifted: dict[tuple[int, int], str] = {}
         for (row, col), color in self.grid.items():
             new_row = row + 1
-            # Preserve approximate horizontal position as the row parity changes.
             x, _ = self.cell_xy(row, col)
             best = min(range(COLS), key=lambda c: abs(self.cell_xy(new_row, c)[0] - x))
             shifted[(new_row, best)] = color
@@ -213,7 +209,7 @@ class BubbleShooter:
     def end_game(self, won: bool) -> None:
         self.game_over = True
         self.projectile = None
-        self.message = "YOU WIN!" if won else "GAME OVER"
+        self.message = "YOU WIN :D!" if won else "GAME OVER X-X"
 
     def bubble(self, x: float, y: float, color: str, radius: int = RADIUS) -> None:
         c = self.canvas
@@ -230,7 +226,7 @@ class BubbleShooter:
         c.create_text(WIDTH-35, 24, text=f"LEVEL  {self.level}", anchor="e", fill="#5a164f", font=("Arial", 17, "bold"))
         for cell, color in self.grid.items():
             self.bubble(*self.cell_xy(*cell), color)
-        # Dotted aim guide, capped to avoid aiming downward.
+        #aim guide
         dx, dy = self.mouse_x - SHOOTER_X, min(self.mouse_y, SHOOTER_Y - 20) - SHOOTER_Y
         length = max(1, math.hypot(dx, dy))
         for distance in range(45, 165, 24):
